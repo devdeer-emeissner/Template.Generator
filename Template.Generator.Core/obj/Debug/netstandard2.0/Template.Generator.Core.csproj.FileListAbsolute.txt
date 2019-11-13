@@ -1,0 +1,16 @@
+/mnt/c/Users/EugenMeissner/Dev/Template.Generator/Template.Generator.Core/bin/Debug/netstandard2.0/Template.Generator.Core.deps.json
+/mnt/c/Users/EugenMeissner/Dev/Template.Generator/Template.Generator.Core/bin/Debug/netstandard2.0/Template.Generator.Core.dll
+/mnt/c/Users/EugenMeissner/Dev/Template.Generator/Template.Generator.Core/bin/Debug/netstandard2.0/Template.Generator.Core.pdb
+/mnt/c/Users/EugenMeissner/Dev/Template.Generator/Template.Generator.Core/obj/Debug/netstandard2.0/Template.Generator.Core.csprojAssemblyReference.cache
+/mnt/c/Users/EugenMeissner/Dev/Template.Generator/Template.Generator.Core/obj/Debug/netstandard2.0/Template.Generator.Core.AssemblyInfoInputs.cache
+/mnt/c/Users/EugenMeissner/Dev/Template.Generator/Template.Generator.Core/obj/Debug/netstandard2.0/Template.Generator.Core.AssemblyInfo.cs
+/mnt/c/Users/EugenMeissner/Dev/Template.Generator/Template.Generator.Core/obj/Debug/netstandard2.0/Template.Generator.Core.dll
+/mnt/c/Users/EugenMeissner/Dev/Template.Generator/Template.Generator.Core/obj/Debug/netstandard2.0/Template.Generator.Core.pdb
+C:\Users\EugenMeissner\Dev\Template.Generator\Template.Generator.Core\bin\Debug\netstandard2.0\Template.Generator.Core.deps.json
+C:\Users\EugenMeissner\Dev\Template.Generator\Template.Generator.Core\bin\Debug\netstandard2.0\Template.Generator.Core.dll
+C:\Users\EugenMeissner\Dev\Template.Generator\Template.Generator.Core\bin\Debug\netstandard2.0\Template.Generator.Core.pdb
+C:\Users\EugenMeissner\Dev\Template.Generator\Template.Generator.Core\obj\Debug\netstandard2.0\Template.Generator.Core.csprojAssemblyReference.cache
+C:\Users\EugenMeissner\Dev\Template.Generator\Template.Generator.Core\obj\Debug\netstandard2.0\Template.Generator.Core.AssemblyInfoInputs.cache
+C:\Users\EugenMeissner\Dev\Template.Generator\Template.Generator.Core\obj\Debug\netstandard2.0\Template.Generator.Core.AssemblyInfo.cs
+C:\Users\EugenMeissner\Dev\Template.Generator\Template.Generator.Core\obj\Debug\netstandard2.0\Template.Generator.Core.dll
+C:\Users\EugenMeissner\Dev\Template.Generator\Template.Generator.Core\obj\Debug\netstandard2.0\Template.Generator.Core.pdb
