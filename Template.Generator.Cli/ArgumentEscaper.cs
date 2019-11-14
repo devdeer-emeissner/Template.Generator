@@ -6,29 +6,12 @@ namespace Template.Generator.Cli
 {
     internal static class ArgumentEscaper
     {
-        /// <summary>
-        /// Undo the processing which took place to create string[] args in Main,
-        /// so that the next process will receive the same string[] args
-        /// 
-        /// See here for more info:
-        /// http://blogs.msdn.com/b/twistylittlepassagesallalike/archive/2011/04/23/everyone-quotes-arguments-the-wrong-way.aspx
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
         public static string EscapeAndConcatenateArgArrayForProcessStart(IEnumerable<string> args)
         {
             return string.Join(" ", EscapeArgArray(args));
         }
 
-        /// <summary>
-        /// Undo the processing which took place to create string[] args in Main,
-        /// so that the next process will receive the same string[] args
-        /// 
-        /// See here for more info:
-        /// http://blogs.msdn.com/b/twistylittlepassagesallalike/archive/2011/04/23/everyone-quotes-arguments-the-wrong-way.aspx
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
+
         private static IEnumerable<string> EscapeArgArray(IEnumerable<string> args)
         {
             var escapedArgs = new List<string>();

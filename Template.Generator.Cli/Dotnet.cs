@@ -29,11 +29,11 @@ namespace Template.Generator.Cli
             };
         }
 
-        public static Dotnet CreateProject(string projectAlias, params string[] args)
+        public static Dotnet New(string projectAlias, params string[] args)
         {
             return new Dotnet
             {
-                _info = new ProcessStartInfo("dotnet", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "new" }.Concat(args)))
+                _info = new ProcessStartInfo("dotnet", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "new", projectAlias }.Concat(args)))
                 {
                     UseShellExecute = false,
                     CreateNoWindow = true,

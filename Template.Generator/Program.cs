@@ -1,6 +1,7 @@
 ﻿using System;
-using Template.Generator.Core.Model;
 using Template.Generator.Cli;
+using Newtonsoft.Json;
+using Template.Generator.Core.Models;
 
 namespace Template.Generator
 {
@@ -8,7 +9,9 @@ namespace Template.Generator
     {
         static void Main(string[] args)
         {
-            var result = Dotnet.
+            var temp = Guid.NewGuid();
+            var json = JsonConvert.SerializeObject(temp);
+            var guid = JsonConvert.DeserializeObject<Guid>(json); 
         }
     }
 }
