@@ -5,8 +5,8 @@ namespace Template.Generator.Core.Contracts
 {
     public interface IDotnetEntity
     {
-        Guid Id { get; set; }
-        EntityType Type { get; set; }
+        Guid Id { get; }
+        EntityType Type { get; }
         string[] Args { get; set; }
     }
 }

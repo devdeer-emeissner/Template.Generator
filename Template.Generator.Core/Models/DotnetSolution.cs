@@ -7,10 +7,11 @@ namespace Template.Generator.Core.Models
 {
     public class DotnetSolution : IDotnetEntity
     {
-        public Guid Id { get; set; }
-        public EntityType Type { get; set; }
+        public Guid Id { get; } = Guid.NewGuid();
+        public EntityType Type { get; } = EntityType.Solution;
+        public string Path { get; set; }
         public string Name { get; set; }
-        public IList<Guid> ProjectRefs { get; set; }
-        public string[] Args { get; set; }
+        public IList<Guid> ProjectRefs { get; }
+        public string[] Args { get; set;}
     }
 }

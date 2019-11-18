@@ -32,7 +32,7 @@ namespace Template.Generator.Cli
             var isQuoted = needsQuotes || IsSurroundedWithQuotes(arg);
 
             if (needsQuotes) sb.Append("\"");
-
+            
             for (int i = 0; i < arg.Length; ++i)
             {
                 var backslashCount = 0;
