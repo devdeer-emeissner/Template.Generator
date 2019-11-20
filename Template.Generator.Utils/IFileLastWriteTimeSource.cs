@@ -1,6 +1,6 @@
 using System;
 
-namespace Template.Generator.Core.Contracts
+namespace Template.Generator.Utils
 {
     public interface IFileLastWriteTimeSource
     {

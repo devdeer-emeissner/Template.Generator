@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Template.Generator.Core.Contracts;
 
 namespace Template.Generator.Utils
 {

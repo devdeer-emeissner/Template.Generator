@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Template.Generator.Core.Contracts;
 
 namespace Template.Generator.Utils
 {
+
     public class PhysicalFileSystem : IPhysicalFileSystem, IFileLastWriteTimeSource
     {
         public bool DirectoryExists(string directory)

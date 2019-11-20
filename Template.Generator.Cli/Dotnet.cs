@@ -29,11 +29,11 @@ namespace Template.Generator.Cli
             };
         }
 
-        public static Dotnet New(string projectAlias, params string[] args)
+        public static Dotnet New(string alias, params string[] args)
         {
             return new Dotnet
             {
-                _info = new ProcessStartInfo("dotnet", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "new", projectAlias }.Concat(args)))
+                _info = new ProcessStartInfo("dotnet", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "new", alias }.Concat(args)))
                 {
                     UseShellExecute = false,
                     CreateNoWindow = true,
@@ -83,7 +83,7 @@ namespace Template.Generator.Cli
 
         public static Dotnet AddProjectsToSolution(string solutionFile, IReadOnlyList<string> projects)
         {
-            List<string> allArgs = new List<string>()
+            var allArgs = new List<string>()
             {
                 "sln",
                 solutionFile,
@@ -163,7 +163,7 @@ namespace Template.Generator.Cli
 
         public Result Execute()
         {
-            Process p = Process.Start(_info);
+            var p = Process.Start(_info);
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
             p.ErrorDataReceived += OnErrorDataReceived;

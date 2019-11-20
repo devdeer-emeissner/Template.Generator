@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using Template.Generator.Core.Contracts;
 using Template.Generator.Core.Types;
+using Template.Generator.Utils;
 
 namespace Template.Generator.Core.Models
 {
     public class DotnetSolution : IDotnetEntity
     {
-        public Guid Id { get; } = Guid.NewGuid();
-        public EntityType Type { get; } = EntityType.Solution;
-        public string Path { get; set; }
+        public string Guid { get; }
+        public string Path { get; set; } = PathHelper.GetProjectRootPath();
         public string Name { get; set; }
-        public IList<Guid> ProjectRefs { get; }
-        public string[] Args { get; set;}
+        public IList<string> ProjectRefs { get; } = new List<string>();
+        public IEnumerable<string> Args { get; set; } = new List<string>();
     }
 }
