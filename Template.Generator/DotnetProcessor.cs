@@ -17,6 +17,7 @@ namespace Template.Generator
             if (cfg.Projects != null)
             {
                 //create projects
+                //TODO: Make this run in parallel
                 cfg.Projects.ForEach(project => CreateProject(project));
                 //sets refs in solution
                 AddProjectsToSolutionReference(cfg.Solution, cfg.Projects.Select(project => $"{project.Path}{project.Name}/").ToList());
@@ -32,6 +33,7 @@ namespace Template.Generator
                         }
                     }
                 }
+                RestoreSolution(cfg.Solution);
             }
         }
 
@@ -52,7 +54,9 @@ namespace Template.Generator
         {
             var args = new List<string> {
                  "--name", project.Name,
-                 "--output", PathHelper.GetProjectRootPath() + $"/{project.Name}"
+                 "--output", PathHelper.GetProjectRootPath() + $"/{project.Name}",
+                 "--no-restore"
+
             };
             project.Args = project.Args.Concat(args);
             Dotnet.New(project.Alias, project.Args.ToArray())
@@ -66,9 +70,17 @@ namespace Template.Generator
             return projects.Single(x => x.Guid == guid);
         }
 
+        private static void RestoreSolution(DotnetSolution solution)
+        {
+            Dotnet.Restore($"{solution.Path}{solution.Name}.sln")
+                    .ForwardStdOut()
+                    .ForwardStdErr()
+                    .Execute();
+        }
+
         private static void AddProjectsToSolutionReference(DotnetSolution solution, IReadOnlyList<string> projectPaths)
         {
-            Dotnet.AddProjectsToSolution(solution.Path, projectPaths)
+            Dotnet.AddProjectsToSolution($"{solution.Path}{solution.Name}.sln", projectPaths)
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
