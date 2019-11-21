@@ -8,7 +8,7 @@ namespace Template.Generator.Core.Models
 {
     public class DotnetProject : IDotnetEntity
     {
-        public string Guid { get; }
+        public string Guid { get; set; }
         public string Alias { get; set; }
         public string Name { get; set; }
         public string Path { get; set; } = PathHelper.GetProjectRootPath();

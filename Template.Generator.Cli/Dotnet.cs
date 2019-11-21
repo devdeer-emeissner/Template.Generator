@@ -83,16 +83,13 @@ namespace Template.Generator.Cli
 
         public static Dotnet AddProjectsToSolution(string solutionFile, IReadOnlyList<string> projects)
         {
-            var allArgs = new List<string>()
-            {
+            var allArgs = new List<string>() {
                 "sln",
                 solutionFile,
                 "add"
             };
-
             allArgs.AddRange(projects);
             string argString = ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(allArgs);
-
             return new Dotnet
             {
                 _info = new ProcessStartInfo("dotnet", argString)

@@ -11,7 +11,7 @@ namespace Template.Generator
     public class TemplateProcessor
     {
         private string _rootPath;
-        private IPhysicalFileSystem _fileSystem { get; set; }
+        private IPhysicalFileSystem _fileSystem;
         private ProjectTemplate _projectTemplate;
         private string _projectTemplateJson;
         private const string _templateSearchPattern = "*_template.config";
@@ -48,7 +48,7 @@ namespace Template.Generator
         private ProjectTemplate InitProjectTemplateFromJsonConfig()
         {
             var files = FileFindHelpers.FindFilesAtOrAbovePath(_fileSystem, _rootPath, _templateSearchPattern);
-            if (files.Count > 1) throw new ArgumentException("Multiple config files found, make sure that there is only one *_template.config file inside your project directory");
+            if (files.Count > 1) throw new ArgumentException("Multiple config files found, make sure that there is only a single *_template.config file inside your project directory");
             Console.WriteLine(_fileSystem.ReadAllText(files.First()));
             var template = JsonConvert.DeserializeObject<ProjectTemplate>(_fileSystem.ReadAllText(files.First()));
             return template;

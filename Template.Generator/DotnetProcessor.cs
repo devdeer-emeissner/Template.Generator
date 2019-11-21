@@ -10,17 +10,16 @@ namespace Template.Generator
     public static class DotnetConfigProcessor
     {
        
-       public static void ProcessConfig(DotnetConfig cfg)
-       {
+        public static void ProcessConfig(DotnetConfig cfg)
+        {
             if (cfg.Solution != null) 
-                CreateSolution(cfg.Solution);
+                 CreateSolution(cfg.Solution);
             if (cfg.Projects != null)
             {
                 //create projects
-                foreach (var project in cfg.Projects)
-                {
-                    CreateProject(project);
-                }
+                cfg.Projects.ForEach(project => CreateProject(project));
+                //sets refs in solution
+                AddProjectsToSolutionReference(cfg.Solution, cfg.Projects.Select(project => $"{project.Path}{project.Name}/").ToList());
                 //sets refs in projects
                 foreach(var project in cfg.Projects)
                 {
@@ -34,52 +33,54 @@ namespace Template.Generator
                     }
                 }
             }
-       }
-       
-       private static void CreateSolution(DotnetSolution solution)
-       {
-           var args = new List<string> { 
-                    "--name", solution.Name, 
-                    "--output", solution.Path, 
-                };
-                solution.Args = solution.Args.Concat(args);
-                var result = Dotnet.New("sln", solution.Args.ToArray())
-                                    .CaptureStdOut()
-                                    .CaptureStdErr()
-                                    .Execute();
-            if(!string.IsNullOrEmpty(result.StdOut) || !string.IsNullOrEmpty(result.StdErr))
-                Console.Out.WriteLine(result.StdOut, result.StdErr);
-       }
-       
-       private static void CreateProject(DotnetProject project)
-       {
+        }
+
+        private static void CreateSolution(DotnetSolution solution)
+        {
+            var args = new List<string> { 
+                     "--name", solution.Name, 
+                     "--output", solution.Path, 
+            };
+            solution.Args = solution.Args.Concat(args);
+            Dotnet.New("sln", solution.Args.ToArray())
+                    .ForwardStdOut()
+                    .ForwardStdErr()
+                    .Execute();
+        }
+
+        private static void CreateProject(DotnetProject project)
+        {
             var args = new List<string> {
-                "--name", project.Name,
-                "--output", PathHelper.GetProjectRootPath() + $"/{project.Name}"
+                 "--name", project.Name,
+                 "--output", PathHelper.GetProjectRootPath() + $"/{project.Name}"
             };
             project.Args = project.Args.Concat(args);
-            var result = Dotnet.New(project.Alias, project.Args.ToArray())
-                                .CaptureStdOut()
-                                .CaptureStdErr()
-                                .Execute();
-            if(!string.IsNullOrEmpty(result.StdOut) || !string.IsNullOrEmpty(result.StdErr))
-                Console.Out.WriteLine(result.StdOut, result.StdErr);
-       }
+            Dotnet.New(project.Alias, project.Args.ToArray())
+                    .ForwardStdErr()
+                    .ForwardStdOut()
+                    .Execute();
+        }
 
-       private static DotnetProject GetProject(IList<DotnetProject> projects, string guid)
-       {
-           return projects.Single(x => x.Guid == guid);
-       }
+        private static DotnetProject GetProject(IList<DotnetProject> projects, string guid)
+        {
+            return projects.Single(x => x.Guid == guid);
+        }
 
-       private static void AddProjectReference(DotnetProject project, DotnetProject refProject)
-       {
-            var result = Dotnet.AddProjectToProjectReference(project.Path + $"/{project.Name}.csproj", refProject.Path + $"/{refProject.Name}")
-                                .CaptureStdOut()
-                                .CaptureStdErr()
-                                .Execute();
-            if(!string.IsNullOrEmpty(result.StdOut) || !string.IsNullOrEmpty(result.StdErr))
-                Console.Out.WriteLine(result.StdOut, result.StdErr);
-       }
+        private static void AddProjectsToSolutionReference(DotnetSolution solution, IReadOnlyList<string> projectPaths)
+        {
+            Dotnet.AddProjectsToSolution(solution.Path, projectPaths)
+                    .ForwardStdOut()
+                    .ForwardStdErr()
+                    .Execute();
+        }
+
+        private static void AddProjectReference(DotnetProject project, DotnetProject refProject)
+        {
+            Dotnet.AddProjectToProjectReference(project.Path + project.Name, refProject.Path + refProject.Name)
+                    .ForwardStdOut()
+                    .ForwardStdErr()
+                    .Execute();
+        }
 
        private static void AddPackageReference(DotnetProject proj, Package package)
        {
