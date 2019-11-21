@@ -13,25 +13,33 @@ namespace Template.Generator
         public static void ProcessConfig(DotnetConfig cfg)
         {
             if (cfg.Solution != null) 
-                 CreateSolution(cfg.Solution);
+                CreateSolution(cfg.Solution);
             if (cfg.Projects != null)
             {
+                //TODO: make CreateProject() run in parallel
                 //create projects
-                //TODO: Make this run in parallel
                 cfg.Projects.ForEach(project => CreateProject(project));
-                //sets refs in solution
+                //adds refs to solution
                 AddProjectsToSolutionReference(cfg.Solution, cfg.Projects.Select(project => $"{project.Path}{project.Name}/").ToList());
-                //sets refs in projects
                 foreach(var project in cfg.Projects)
                 {
-                    foreach (var reference in project.ProjectRefs)
+                    //adds refs to projects
+                    if (project.ProjectRefs != null)
                     {
-                        var refProject = GetProject(cfg.Projects,reference);
-                        if(refProject != null)
+                        foreach (var refGuid in project.ProjectRefs)
                         {
-                            AddProjectReference(project, refProject);
-                        }
+                            var refProject = GetProjectByGuid(cfg.Projects,refGuid);
+                            if(refProject != null)
+                            {
+                                AddProjectReference(project, refProject);
+                            }
+                        } 
                     }
+                    //adds package refs to project
+                    if(project.Packages != null)
+                    {
+                        project.Packages.ForEach(package => AddPackageReference(project, package));
+                    }   
                 }
                 RestoreSolution(cfg.Solution);
             }
@@ -65,7 +73,7 @@ namespace Template.Generator
                     .Execute();
         }
 
-        private static DotnetProject GetProject(IList<DotnetProject> projects, string guid)
+        private static DotnetProject GetProjectByGuid(IList<DotnetProject> projects, string guid)
         {
             return projects.Single(x => x.Guid == guid);
         }
@@ -94,9 +102,24 @@ namespace Template.Generator
                     .Execute();
         }
 
-       private static void AddPackageReference(DotnetProject proj, Package package)
+       private static void AddPackageReference(DotnetProject project, Package package)
        {
-
+           //use latest version if no version is provided
+           if (package.Version == null)
+           {
+                Dotnet.AddPackageReference($"{project.Path}{project.Name}",package.Name)
+                        .ForwardStdOut()
+                        .ForwardStdErr()
+                        .Execute();
+           } 
+           else
+           {
+               Dotnet.AddPackageReference($"{project.Path}{project.Name}", package.Name, package.Version)
+                        .ForwardStdOut()
+                        .ForwardStdErr()
+                        .Execute();
+           }
+           
        }
     }
 }

@@ -12,8 +12,8 @@ namespace Template.Generator.Core.Models
         public string Alias { get; set; }
         public string Name { get; set; }
         public string Path { get; set; } = PathHelper.GetProjectRootPath();
-        public IList<string> ProjectRefs { get; set; } = new List<string>();
-        public IList<Package> Packages { get; set; } = new List<Package>();
+        public List<string> ProjectRefs { get; set; } = new List<string>();
+        public List<Package> Packages { get; set; } = new List<Package>();
         public IEnumerable<string> Args { get; set; } = new List<string>();
     }
 }
