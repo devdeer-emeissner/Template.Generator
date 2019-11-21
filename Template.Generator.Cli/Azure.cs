@@ -1,4 +1,6 @@
+using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace Template.Generator.Cli
@@ -11,5 +13,111 @@ namespace Template.Generator.Cli
         private StringBuilder _stdout;
         private DataReceivedEventHandler _outputDataReceived;
         private bool _anyNonEmptyStderrWritten;
+
+        public static Azure Login(params string[] args)
+        {
+            return new Azure
+            {
+                _info = new ProcessStartInfo("az", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "login"}.Concat(args)))
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true 
+                }
+            };
+        }
+
+        public Azure ForwardStdErr()
+        {
+            _errorDataReceived = ForwardStreamStdErr;
+            return this;
+        }
+
+        public Azure ForwardStdOut()
+        {
+            _outputDataReceived = ForwardStreamStdOut;
+            return this;
+        }
+
+        private void ForwardStreamStdOut(object sender, DataReceivedEventArgs e)
+        {
+            Console.Out.WriteLine(e.Data);
+        }
+
+        private void ForwardStreamStdErr(object sender, DataReceivedEventArgs e)
+        {
+            if (!_anyNonEmptyStderrWritten)
+            {
+                if (string.IsNullOrWhiteSpace(e.Data))
+                {
+                    return;
+                }
+
+                _anyNonEmptyStderrWritten = true;
+            }
+
+            Console.Error.WriteLine(e.Data);
+        }
+
+        public Azure CaptureStdOut()
+        {
+            _stdout = new StringBuilder();
+            _outputDataReceived += CaptureStreamStdOut;
+            return this;
+        }
+
+        private void CaptureStreamStdOut(object sender, DataReceivedEventArgs e)
+        {
+            _stdout.AppendLine(e.Data);
+        }
+
+        public Azure CaptureStdErr()
+        {
+            _stderr = new StringBuilder();
+            _errorDataReceived += CaptureStreamStdErr;
+            return this;
+        }
+
+        private void CaptureStreamStdErr(object sender, DataReceivedEventArgs e)
+        {
+            _stderr.AppendLine(e.Data);
+        }
+
+        public Result Execute()
+        {
+            var p = Process.Start(_info);
+            p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
+            p.ErrorDataReceived += OnErrorDataReceived;
+            p.OutputDataReceived += OnOutputDataReceived;
+            p.WaitForExit();
+
+            return new Result(_stdout?.ToString(), _stderr?.ToString(), p.ExitCode);
+        }
+
+        private void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            _outputDataReceived?.Invoke(sender, e);
+        }
+
+        private void OnErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            _errorDataReceived?.Invoke(sender, e);
+        }
+
+        public static Azure Version()
+        {
+            return new Azure
+            {
+                _info = new ProcessStartInfo("az", "--version")
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+        }
     }
 }
