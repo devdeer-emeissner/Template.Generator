@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Template.Generator.Cli;
-using Template.Generator.Core.Models;
+using Template.Generator.Core.Models.Dotnet;
 using Template.Generator.Utils;
 
 namespace Template.Generator
@@ -12,37 +12,40 @@ namespace Template.Generator
        
         public static void ProcessConfig(DotnetConfig cfg)
         {
-            if (cfg.Solution != null) 
-                CreateSolution(cfg.Solution);
-            if (cfg.Projects != null)
+            if (cfg.Solution != null)
             {
-                //TODO: make CreateProject() run in parallel
-                //create projects
-                cfg.Projects.ForEach(project => CreateProject(project));
-                //adds refs to solution
-                AddProjectsToSolutionReference(cfg.Solution, cfg.Projects.Select(project => $"{project.Path}{project.Name}/").ToList());
-                foreach(var project in cfg.Projects)
+                CreateSolution(cfg.Solution);
+                if (cfg.Projects != null)
                 {
-                    //adds refs to projects
-                    if (project.ProjectRefs != null)
+                    //TODO: make this run un parallel
+                    //create projects
+                    cfg.Projects.ForEach(project => CreateProject(project));
+                    //adds refs to solution
+                    AddProjectsToSolutionReference(cfg.Solution, cfg.Projects.Select(project => $"{project.Path}{project.Name}/").ToList());
+                    foreach(var project in cfg.Projects)
                     {
-                        foreach (var refGuid in project.ProjectRefs)
+                        //adds refs to projects
+                        if (project.ProjectRefs != null)
                         {
-                            var refProject = GetProjectByGuid(cfg.Projects,refGuid);
-                            if(refProject != null)
+                            foreach (var refGuid in project.ProjectRefs)
                             {
-                                AddProjectReference(project, refProject);
-                            }
-                        } 
+                                var refProject = GetProjectByGuid(cfg.Projects,refGuid);
+                                if(refProject != null)
+                                {
+                                    AddProjectReference(project, refProject);
+                                }
+                            } 
+                        }
+                        //adds package refs to project
+                        if(project.Packages != null)
+                        {
+                            project.Packages.ForEach(package => AddPackageReference(project, package));
+                        }   
                     }
-                    //adds package refs to project
-                    if(project.Packages != null)
-                    {
-                        project.Packages.ForEach(package => AddPackageReference(project, package));
-                    }   
                 }
                 RestoreSolution(cfg.Solution);
             }
+            
         }
 
         private static void CreateSolution(DotnetSolution solution)
@@ -52,7 +55,7 @@ namespace Template.Generator
                      "--output", solution.Path, 
             };
             solution.Args = solution.Args.Concat(args);
-            Dotnet.New("sln", solution.Args.ToArray())
+            DotnetCli.New("sln", solution.Args.ToArray())
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
@@ -67,7 +70,7 @@ namespace Template.Generator
 
             };
             project.Args = project.Args.Concat(args);
-            Dotnet.New(project.Alias, project.Args.ToArray())
+            DotnetCli.New(project.Alias, project.Args.ToArray())
                     .ForwardStdErr()
                     .ForwardStdOut()
                     .Execute();
@@ -80,7 +83,7 @@ namespace Template.Generator
 
         private static void RestoreSolution(DotnetSolution solution)
         {
-            Dotnet.Restore($"{solution.Path}{solution.Name}.sln")
+            DotnetCli.Restore($"{solution.Path}{solution.Name}.sln")
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
@@ -88,7 +91,7 @@ namespace Template.Generator
 
         private static void AddProjectsToSolutionReference(DotnetSolution solution, IReadOnlyList<string> projectPaths)
         {
-            Dotnet.AddProjectsToSolution($"{solution.Path}{solution.Name}.sln", projectPaths)
+            DotnetCli.AddProjectsToSolution($"{solution.Path}{solution.Name}.sln", projectPaths)
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
@@ -96,7 +99,7 @@ namespace Template.Generator
 
         private static void AddProjectReference(DotnetProject project, DotnetProject refProject)
         {
-            Dotnet.AddProjectToProjectReference(project.Path + project.Name, refProject.Path + refProject.Name)
+            DotnetCli.AddProjectToProjectReference(project.Path + project.Name, refProject.Path + refProject.Name)
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
@@ -107,14 +110,14 @@ namespace Template.Generator
            //use latest version if no version is provided
            if (package.Version == null)
            {
-                Dotnet.AddPackageReference($"{project.Path}{project.Name}",package.Name)
+                DotnetCli.AddPackageReference($"{project.Path}{project.Name}",package.Name)
                         .ForwardStdOut()
                         .ForwardStdErr()
                         .Execute();
            } 
            else
            {
-               Dotnet.AddPackageReference($"{project.Path}{project.Name}", package.Name, package.Version)
+               DotnetCli.AddPackageReference($"{project.Path}{project.Name}", package.Name, package.Version)
                         .ForwardStdOut()
                         .ForwardStdErr()
                         .Execute();

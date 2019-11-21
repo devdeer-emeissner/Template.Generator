@@ -6,7 +6,7 @@ using System.Text;
 namespace Template.Generator.Cli
 {
     public class Azure
-    {
+    {  
         private ProcessStartInfo _info;
         private DataReceivedEventHandler _errorDataReceived;
         private StringBuilder _stderr;
@@ -18,12 +18,53 @@ namespace Template.Generator.Cli
         {
             return new Azure
             {
-                _info = new ProcessStartInfo("az", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "login"}.Concat(args)))
+                _info = new ProcessStartInfo("az", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "login" }.Concat(args)))
                 {
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardError = true,
-                    RedirectStandardOutput = true 
+                    RedirectStandardOutput = true
+                }
+            };
+        }
+
+        public Azure CreateResourceGroup(string name, string location, params string[] args)
+        {
+            return new Azure
+            {
+                _info = new ProcessStartInfo("az", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "group", "create", "--name", name, "--location", location }.Concat(args)))
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+        }
+
+        public Azure CreateWebApp()
+        {
+            return new Azure
+            {
+                _info = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+        }
+        public Azure CreateAppServicePlan(string name, string resourceGroup, params string[] args)
+        {
+            return new Azure
+            {
+                _info = new ProcessStartInfo("az", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "appservice", "plan", "create", "--name", name, "--resource-group", resourceGroup }.Concat(args)))
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
                 }
             };
         }

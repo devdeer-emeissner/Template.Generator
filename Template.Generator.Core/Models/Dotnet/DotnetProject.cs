@@ -4,7 +4,7 @@ using Template.Generator.Core.Contracts;
 using Template.Generator.Core.Types;
 using Template.Generator.Utils;
 
-namespace Template.Generator.Core.Models
+namespace Template.Generator.Core.Models.Dotnet
 {
     public class DotnetProject : IDotnetEntity
     {

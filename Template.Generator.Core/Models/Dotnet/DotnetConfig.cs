@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Template.Generator.Core.Models
+namespace Template.Generator.Core.Models.Dotnet
 {
     public class DotnetConfig
     {

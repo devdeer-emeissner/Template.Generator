@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Template.Generator.Core.Models;
+using Template.Generator.Cli;
 using Template.Generator.Utils;
 
 namespace Template.Generator
@@ -10,7 +10,8 @@ namespace Template.Generator
     {
         static void Main(string[] args)
         {
-            var processor = new TemplateProcessor(PathHelper.GetProjectRootPath());          
+            //var processor = new TemplateProcessor(PathHelper.GetProjectRootPath())
+                    
         }
     }
 }

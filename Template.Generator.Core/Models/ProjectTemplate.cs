@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using Template.Generator.Core.Models.Dotnet;
+using Template.Generator.Core.Models.Azure;
 
 namespace Template.Generator.Core.Models
 {
     public class ProjectTemplate
     {
-        public IList<DotnetConfig> DotnetConfigs { get; set; }
+        public List<DotnetConfig> DotnetConfigs { get; set; }
+        public List<AzureConfig> AzureConfigs { get; set; }
     }
 }
