@@ -42,11 +42,11 @@ namespace Template.Generator.Cli
             };
         }
 
-        public Azure CreateWebApp()
+        public Azure CreateWebApp(string name, string resourceGroup, string plan, params string[] args)
         {
             return new Azure
             {
-                _info = new ProcessStartInfo()
+                _info = new ProcessStartInfo("az", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "webapp", "create", "--name", name, "--plan", plan, "--resource-group", resourceGroup }.Concat(args)))
                 {
                     UseShellExecute = false,
                     CreateNoWindow = true,
@@ -65,6 +65,20 @@ namespace Template.Generator.Cli
                     CreateNoWindow = true,
                     RedirectStandardError = true,
                     RedirectStandardOutput = true
+                }
+            };
+        }
+
+        public Azure DeployArmTemplate(string resourceGroup, string pathToTemplate, params string[] args)
+        {
+            return new Azure
+            {
+                _info = new ProcessStartInfo("az", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "group", "deployment", "create", "--resource-group", resourceGroup, "--template-file", pathToTemplate }.Concat(args)))
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true 
                 }
             };
         }

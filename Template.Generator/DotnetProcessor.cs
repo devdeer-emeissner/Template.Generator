@@ -9,7 +9,6 @@ namespace Template.Generator
 {
     public static class DotnetConfigProcessor
     {
-       
         public static void ProcessConfig(DotnetConfig cfg)
         {
             if (cfg.Solution != null)
@@ -55,7 +54,7 @@ namespace Template.Generator
                      "--output", solution.Path, 
             };
             solution.Args = solution.Args.Concat(args);
-            DotnetCli.New("sln", solution.Args.ToArray())
+            Dotnet.New("sln", solution.Args.ToArray())
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
@@ -70,7 +69,7 @@ namespace Template.Generator
 
             };
             project.Args = project.Args.Concat(args);
-            DotnetCli.New(project.Alias, project.Args.ToArray())
+            Dotnet.New(project.Alias, project.Args.ToArray())
                     .ForwardStdErr()
                     .ForwardStdOut()
                     .Execute();
@@ -83,7 +82,7 @@ namespace Template.Generator
 
         private static void RestoreSolution(DotnetSolution solution)
         {
-            DotnetCli.Restore($"{solution.Path}{solution.Name}.sln")
+            Dotnet.Restore($"{solution.Path}{solution.Name}.sln")
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
@@ -91,7 +90,7 @@ namespace Template.Generator
 
         private static void AddProjectsToSolutionReference(DotnetSolution solution, IReadOnlyList<string> projectPaths)
         {
-            DotnetCli.AddProjectsToSolution($"{solution.Path}{solution.Name}.sln", projectPaths)
+            Dotnet.AddProjectsToSolution($"{solution.Path}{solution.Name}.sln", projectPaths)
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
@@ -99,7 +98,7 @@ namespace Template.Generator
 
         private static void AddProjectReference(DotnetProject project, DotnetProject refProject)
         {
-            DotnetCli.AddProjectToProjectReference(project.Path + project.Name, refProject.Path + refProject.Name)
+            Dotnet.AddProjectToProjectReference(project.Path + project.Name, refProject.Path + refProject.Name)
                     .ForwardStdOut()
                     .ForwardStdErr()
                     .Execute();
@@ -110,14 +109,14 @@ namespace Template.Generator
            //use latest version if no version is provided
            if (package.Version == null)
            {
-                DotnetCli.AddPackageReference($"{project.Path}{project.Name}",package.Name)
+                Dotnet.AddPackageReference($"{project.Path}{project.Name}",package.Name)
                         .ForwardStdOut()
                         .ForwardStdErr()
                         .Execute();
            } 
            else
            {
-               DotnetCli.AddPackageReference($"{project.Path}{project.Name}", package.Name, package.Version)
+               Dotnet.AddPackageReference($"{project.Path}{project.Name}", package.Name, package.Version)
                         .ForwardStdOut()
                         .ForwardStdErr()
                         .Execute();

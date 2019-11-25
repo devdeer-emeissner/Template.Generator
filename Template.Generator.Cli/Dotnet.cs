@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Template.Generator.Cli
 {
-    public class DotnetCli
+    public class Dotnet
     {
         private ProcessStartInfo _info;
         private DataReceivedEventHandler _errorDataReceived;
@@ -15,9 +15,9 @@ namespace Template.Generator.Cli
         private DataReceivedEventHandler _outputDataReceived;
         private bool _anyNonEmptyStderrWritten;
 
-        public static DotnetCli Restore(params string[] args)
+        public static Dotnet Restore(params string[] args)
         {
-            return new DotnetCli
+            return new Dotnet
             {
                 _info = new ProcessStartInfo("dotnet", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "restore" }.Concat(args)))
                 {
@@ -29,9 +29,9 @@ namespace Template.Generator.Cli
             };
         }
 
-        public static DotnetCli New(string alias, params string[] args)
+        public static Dotnet New(string alias, params string[] args)
         {
-            return new DotnetCli
+            return new Dotnet
             {
                 _info = new ProcessStartInfo("dotnet", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "new", alias }.Concat(args)))
                 {
@@ -43,9 +43,9 @@ namespace Template.Generator.Cli
             };
         }
 
-        public static DotnetCli AddProjectToProjectReference(string projectFile, params string[] args)
+        public static Dotnet AddProjectToProjectReference(string projectFile, params string[] args)
         {
-            return new DotnetCli
+            return new Dotnet
             {
                 _info = new ProcessStartInfo("dotnet", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "add", projectFile, "reference" }.Concat(args)))
                 {
@@ -57,7 +57,7 @@ namespace Template.Generator.Cli
             };
         }
 
-        public static DotnetCli AddPackageReference(string projectFile, string packageName, string version = null)
+        public static Dotnet AddPackageReference(string projectFile, string packageName, string version = null)
         {
             string argString;
             if (version == null)
@@ -69,7 +69,7 @@ namespace Template.Generator.Cli
                 argString = ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(new[] { "add", projectFile, "package", packageName, "--version", version, "--no-restore"});
             }
 
-            return new DotnetCli
+            return new Dotnet
             {
                 _info = new ProcessStartInfo("dotnet", argString)
                 {
@@ -81,7 +81,7 @@ namespace Template.Generator.Cli
             };
         }
 
-        public static DotnetCli AddProjectsToSolution(string solutionFile, IReadOnlyList<string> projects)
+        public static Dotnet AddProjectsToSolution(string solutionFile, IReadOnlyList<string> projects)
         {
             var allArgs = new List<string>() {
                 "sln",
@@ -90,7 +90,7 @@ namespace Template.Generator.Cli
             };
             allArgs.AddRange(projects);
             string argString = ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(allArgs);
-            return new DotnetCli
+            return new Dotnet
             {
                 _info = new ProcessStartInfo("dotnet", argString)
                 {
@@ -102,13 +102,13 @@ namespace Template.Generator.Cli
             };
         }
 
-        public DotnetCli ForwardStdErr()
+        public Dotnet ForwardStdErr()
         {
             _errorDataReceived = ForwardStreamStdErr;
             return this;
         }
 
-        public DotnetCli ForwardStdOut()
+        public Dotnet ForwardStdOut()
         {
             _outputDataReceived = ForwardStreamStdOut;
             return this;
@@ -134,7 +134,7 @@ namespace Template.Generator.Cli
             Console.Error.WriteLine(e.Data);
         }
 
-        public DotnetCli CaptureStdOut()
+        public Dotnet CaptureStdOut()
         {
             _stdout = new StringBuilder();
             _outputDataReceived += CaptureStreamStdOut;
@@ -146,7 +146,7 @@ namespace Template.Generator.Cli
             _stdout.AppendLine(e.Data);
         }
 
-        public DotnetCli CaptureStdErr()
+        public Dotnet CaptureStdErr()
         {
             _stderr = new StringBuilder();
             _errorDataReceived += CaptureStreamStdErr;
@@ -180,9 +180,9 @@ namespace Template.Generator.Cli
             _errorDataReceived?.Invoke(sender, e);
         }
 
-        public static DotnetCli Version()
+        public static Dotnet Version()
         {
-            return new DotnetCli
+            return new Dotnet
             {
                 _info = new ProcessStartInfo("dotnet", "--version")
                 {
