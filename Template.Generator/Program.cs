@@ -11,7 +11,6 @@ namespace Template.Generator
         static void Main(string[] args)
         {
             var processor = new TemplateProcessor(PathHelper.GetProjectRootPath());
-
         }
     }
 }

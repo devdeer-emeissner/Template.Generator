@@ -28,6 +28,20 @@ namespace Template.Generator.Cli
             };
         }
 
+        public static Azure Command(params string[] args)
+        {
+            return new Azure()
+            {
+                _info = new ProcessStartInfo("az", ArgumentEscaper.EscapeAndConcatenateArgArrayForProcessStart(args))
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                }
+            };
+        }
+
         public static Azure CreateResourceGroup(string name, string location, params string[] args)
         {
             return new Azure
