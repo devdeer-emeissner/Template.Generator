@@ -6,7 +6,8 @@ namespace Template.Generator.Core.Models
 {
     public class ProjectTemplate
     {
-        public List<DotnetConfig> DotnetConfigs { get; set; }
-        public List<AzureConfig> AzureConfigs { get; set; }
+        public string ProjectName { get; set; }
+        public DotnetConfig DotnetConfig { get; set; }
+        public AzureConfig AzureConfig { get; set; }
     }
 }

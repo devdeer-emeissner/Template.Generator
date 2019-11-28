@@ -39,10 +39,8 @@ namespace Template.Generator
 
         private void ProcessTemplate()
         {
-            foreach (var config in _projectTemplate.DotnetConfigs)
-            {
-                DotnetConfigProcessor.ProcessConfig(config);
-            }
+            DotnetProcessor.ProcessConfig(_projectTemplate.DotnetConfig);
+            AzureProcessor.ProcessConfig(_projectTemplate.AzureConfig);
         }
 
         private ProjectTemplate InitProjectTemplateFromJsonConfig()

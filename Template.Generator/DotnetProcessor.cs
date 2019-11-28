@@ -7,7 +7,7 @@ using Template.Generator.Utils;
 
 namespace Template.Generator
 {
-    public static class DotnetConfigProcessor
+    public static class DotnetProcessor
     {
         public static void ProcessConfig(DotnetConfig cfg)
         {

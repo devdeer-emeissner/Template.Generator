@@ -28,7 +28,7 @@ namespace Template.Generator.Cli
             };
         }
 
-        public Azure CreateResourceGroup(string name, string location, params string[] args)
+        public static Azure CreateResourceGroup(string name, string location, params string[] args)
         {
             return new Azure
             {
@@ -42,7 +42,7 @@ namespace Template.Generator.Cli
             };
         }
 
-        public Azure CreateWebApp(string name, string resourceGroup, string plan, params string[] args)
+        public static Azure CreateWebApp(string name, string resourceGroup, string plan, params string[] args)
         {
             return new Azure
             {
@@ -55,7 +55,7 @@ namespace Template.Generator.Cli
                 }
             };
         }
-        public Azure CreateAppServicePlan(string name, string resourceGroup, params string[] args)
+        public static Azure CreateAppServicePlan(string name, string resourceGroup, params string[] args)
         {
             return new Azure
             {
@@ -69,7 +69,7 @@ namespace Template.Generator.Cli
             };
         }
 
-        public Azure DeployArmTemplate(string resourceGroup, string pathToTemplate, params string[] args)
+        public static Azure DeployArmTemplate(string resourceGroup, string pathToTemplate, params string[] args)
         {
             return new Azure
             {

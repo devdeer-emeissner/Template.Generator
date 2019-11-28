@@ -1,7 +1,10 @@
+using System.Collections.Generic;
+using Template.Generator.Core.Contracts;
+
 namespace Template.Generator.Core.Models.Azure
 {
     public class AzureConfig
     {
-        //TODO: Implement
+        public List<AzureResource> Resources { get; set; }
     }
 }
