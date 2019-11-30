@@ -39,7 +39,7 @@ namespace Template.Generator
 
         private void ProcessTemplate()
         {
-            //DotnetProcessor.ProcessConfig(_projectTemplate.DotnetConfig);
+            DotnetProcessor.ProcessConfig(_projectTemplate.DotnetConfig);
             AzureProcessor.ProcessConfig(_projectTemplate.AzureConfig);
         }
 

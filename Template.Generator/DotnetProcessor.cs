@@ -16,14 +16,14 @@ namespace Template.Generator
                 CreateSolution(cfg.Solution);
                 if (cfg.Projects != null)
                 {
-                    //TODO: make this run un parallel
-                    //create projects
+                    // TODO: make this run un parallel
+                    // create projects
                     cfg.Projects.ForEach(project => CreateProject(project));
                     //adds refs to solution
                     AddProjectsToSolutionReference(cfg.Solution, cfg.Projects.Select(project => $"{project.Path}{project.Name}/").ToList());
                     foreach(var project in cfg.Projects)
                     {
-                        //adds refs to projects
+                        // adds refs to projects
                         if (project.ProjectRefs != null)
                         {
                             foreach (var refGuid in project.ProjectRefs)
@@ -35,7 +35,7 @@ namespace Template.Generator
                                 }
                             } 
                         }
-                        //adds package refs to project
+                        // adds package refs to project
                         if(project.Packages != null)
                         {
                             project.Packages.ForEach(package => AddPackageReference(project, package));

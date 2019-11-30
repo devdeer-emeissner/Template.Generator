@@ -18,7 +18,6 @@ namespace Template.Generator
             {
                 if (Azure.Login().ForwardStdOut().ForwardStdErr().Execute().ExitCode == 0)
                 {
-                    //cfg.Resources.ForEach(resource => Console.WriteLine(resource.GetType().ToString()));
                     cfg.Resources.ForEach(RunCommand);
                 }
             }
